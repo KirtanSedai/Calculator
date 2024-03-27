@@ -1,68 +1,60 @@
-// Hide welcome message when any button is clicked
-let welcomeMessage = document.getElementById('welcome-message');
-buttons.forEach(button => {
-    button.addEventListener('click', () => {
-        welcomeMessage.style.display = 'none';
-    });
-});
+// Get references to the HTML elements
+const screen = document.getElementById('screen'); // Reference to the screen element
+const buttons = document.querySelectorAll('.btn'); // References to all calculator buttons
+const powerButton = document.getElementById('on'); // Reference to the power button
 
-// Calculator functionality
-let screen = document.getElementById('screen');
-let buttons = document.querySelectorAll('.btn'); // Moved declaration up
-let screenvalue = '';
+// Variable to keep track of the calculator's power state
+let isOn = false; // Initialized as off
 
-for (item of buttons) {
-    item.addEventListener('click', (e) => {
-        let buttonText = e.target.innerText;
-        // Perform calculations/handle special cases
-        if (buttonText == '=') {
-            screen.value = eval(screenvalue);
-        } else if (buttonText == 'CL') {
-            // Clear screen
-            screenvalue = '';
-            screen.value = screenvalue;
-        } else if (buttonText == "ON") {
-            // Clear screen when power button pressed
-            screenvalue = '';
-            screen.value = screenvalue;
-        } else {
-            // Append button text to screen input
-            screenvalue += buttonText;
-            screen.value = screenvalue;
-        }
-    });
+// Function to handle button clicks
+function handleButtonClick(e) { // Event handler for button clicks
+  const value = e.target.textContent; // Value of the clicked button
+  if (value === 'CL') { // Clear button
+    screen.value = ''; // Clear the screen
+  } else if (value === '=') { // Equals button
+    try {
+      screen.value = eval(screen.value); // Evaluate the expression
+    } catch (error) {
+      screen.value = 'Error'; // Display error if evaluation fails
+    }
+  } else if (value === 'ON') { // Power button
+    isOn = !isOn; // Toggle power state
+    powerButton.style.backgroundColor = isOn ? 'red' : 'green'; // Change button color based on power state
+    screen.value = ''; // Clear the screen
+  } else { // Any other button
+    if (isOn) { // If the calculator is on
+      screen.value += value; // Append the button value to the screen
+    }
+  }
 }
 
-// Keyboard input handling
-screen.addEventListener('keyup', (e) => {
-    if (e.ctrlKey && e.key.toLowerCase() === 'a') {
-        // Select all text on Ctrl+A
-        screen.select();
-        e.preventDefault();
-    } else if (e.key === 'Backspace' && window.getSelection().toString() === screen.value) {
-        // Clear screen on Backspace when everything is selected
-        screenvalue = '';
-        screen.value = screenvalue;
-        e.preventDefault();
-    } else if ('0123456789+-*/.%'.includes(e.key)) {
-        // Append valid characters to screen input
-        screenvalue += e.key;
-        screen.value = screenvalue;
-    } else if (e.key === 'Enter') {
-        // Perform calculation on Enter key
-        try {
-            screen.value = eval(screenvalue);
-            screenvalue = screen.value;
-        } catch (error) {
-            // Display error if calculation fails
-            screen.value = 'Error';
-            screenvalue = '';
-        }
-        e.preventDefault();
-    }
-
-    // Prevent arrow key default actions
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-        e.preventDefault();
-    }
+// Add event listeners to buttons
+buttons.forEach(button => {
+  button.addEventListener('click', handleButtonClick); // Click event listener for each button
 });
+
+// Function to handle keyboard input
+function handleKeyboardInput(e) { // Event handler for keyboard input
+  const key = e.key; // Pressed key
+  if (key >= '0' && key <= '9' || key === '/' || key === '*' || key === '-' || key === '+' || key === '.') {
+    if (isOn) {
+      screen.value += key; // Append valid keys to the screen if the calculator is on
+    }
+  } else if (key === 'Enter') { // Enter key
+    try {
+      screen.value = eval(screen.value); // Evaluate the expression
+    } catch (error) {
+      screen.value = 'Error'; // Display error if evaluation fails
+    }
+  } else if (key === 'Backspace') { // Backspace key
+    screen.value = screen.value.slice(0, -1); // Remove last character from the screen
+  } else if (key === 'Escape') { // Escape key
+    screen.value = ''; // Clear the screen
+  }
+}
+
+// Add event listener to keyboard input
+document.addEventListener('keydown', handleKeyboardInput); // Keyboard input event listener
+
+// Set initial power state
+powerButton.style.backgroundColor = 'green'; // Initially set the power button color to green
