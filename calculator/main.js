@@ -6,6 +6,11 @@ const powerButton = document.getElementById('power');
 // Variable to keep track of the calculator's power state
 let isOn = false;
 
+// Function to round a number to 3 decimal places
+function roundToThreeDecimals(num) {
+  return Math.round(num * 1000) / 1000;
+}
+
 // Function to handle button clicks
 function handleButtonClick(e) {
   const value = e.target.textContent;
@@ -17,7 +22,8 @@ function handleButtonClick(e) {
   // Evaluate the expression
   else if (value === '=') {
     try {
-      screen.value = eval(screen.value);
+      const result = eval(screen.value);
+      screen.value = isNaN(result) ? 'Error' : roundToThreeDecimals(result);
     } catch (error) {
       screen.value = 'Error';
     }
@@ -57,7 +63,8 @@ function handleKeyboardInput(e) {
   // Evaluate the expression
   else if (key === 'Enter') {
     try {
-      screen.value = eval(screen.value);
+      const result = eval(screen.value);
+      screen.value = isNaN(result) ? 'Error' : roundToThreeDecimals(result);
     } catch (error) {
       screen.value = 'Error';
     }
