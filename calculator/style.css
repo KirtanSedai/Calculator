@@ -1,0 +1,85 @@
+/* CSS Styles */
+body {
+  /* Background and centering */
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Styling for the welcome message */
+.welcome {
+  position: fixed;
+  top: 20vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  color: #333;
+  z-index: 10;
+}
+
+/* Calculator container */
+.container {
+  width: 300px;
+  border-radius: 40px;
+  background-color: #f0f0f0;
+  text-align: center;
+  padding: 20px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
+    -5px -5px 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Centering rows */
+.row {
+  justify-content: center;
+}
+
+/* Calculator button styles */
+.btn {
+  margin: 10px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+/* Button hover effect */
+.btn:hover {
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
+    -5px -5px 10px rgba(255, 255, 255, 0.2);
+  transform: translate(4px, 4px);
+}
+
+/* Styling for the calculator screen */
+#screen {
+  opacity: 0.5;
+  font-size: 30px;
+  height: 70px;
+  width: 250px;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+  text-align: right;
+  margin-top: 20px;
+  box-shadow: inset 5px 10px rgba(0, 0, 0, 0.2),
+    inset -5px -5px 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Styling for the power button */
+#power {
+  color: white;
+  background-color: green;
+}
+
+/* Focus styling for power button */
+#power:focus {
+  background-color: red;
+}
