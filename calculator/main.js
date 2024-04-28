@@ -1,35 +1,28 @@
 // Get references to the HTML elements
-const screen = document.getElementById('screen');
-const buttons = document.querySelectorAll('.btn');
-const powerButton = document.getElementById('power');
+const screen = document.getElementById("screen");
+const buttons = document.querySelectorAll(".btn");
+const powerButton = document.getElementById("power");
 
 // Variable to keep track of the calculator's power state
 let isOn = false;
 
-// Function to round a number to 3 decimal places
-function roundToThreeDecimals(num) {
-  return Math.round(num * 1000) / 1000;
-}
-
 // Function to handle button clicks
 function handleButtonClick(e) {
   const value = e.target.textContent;
-
   // Clear the screen
-  if (value === 'CL') {
-    screen.value = '';
+  if (value === "CL") {
+    screen.value = "";
   }
   // Evaluate the expression
-  else if (value === '=') {
+  else if (value === "=") {
     try {
-      const result = eval(screen.value);
-      screen.value = isNaN(result) ? 'Error' : roundToThreeDecimals(result);
+      screen.value = eval(screen.value);
     } catch (error) {
-      screen.value = 'Error';
+      screen.value = "Error";
     }
   }
   // Toggle power state
-  else if (value === 'ON' || value === 'OFF') {
+  else if (value === "ON" || value === "OFF") {
     togglePower();
   }
   // Append button value to the screen if calculator is on
@@ -43,10 +36,10 @@ function handleButtonClick(e) {
 // Function to toggle power state
 function togglePower() {
   isOn = !isOn;
-  powerButton.textContent = isOn ? 'ON' : 'OFF';
-  powerButton.style.backgroundColor = isOn ? 'green' : 'red';
-  screen.value = '';
-  screen.disabled = !isOn;
+  powerButton.textContent = isOn ? "ON" : "OFF";
+  powerButton.style.backgroundColor = isOn ? "green" : "red";
+  screen.value = "";
+  screen.readOnly = !isOn; // Set the readOnly attribute based on the power state
 }
 
 // Function to handle keyboard input
@@ -56,36 +49,42 @@ function handleKeyboardInput(e) {
   // Prevent input when calculator is off
   if (!isOn) return;
 
-  // Append key value to the screen if calculator is on and key is a digit or operator
-  if ((key >= '0' && key <= '9') || key === '/' || key === '*' || key === '-' || key === '+' || key === '.') {
+  // Append key value to the screen if calculator is on and key is a single digit or operator
+  if (
+    (key >= "0" && key <= "9") ||
+    key === "/" ||
+    key === "*" ||
+    key === "-" ||
+    key === "+" ||
+    key === "."
+  ) {
     screen.value += key;
   }
   // Evaluate the expression
-  else if (key === 'Enter') {
+  else if (key === "Enter") {
     try {
-      const result = eval(screen.value);
-      screen.value = isNaN(result) ? 'Error' : roundToThreeDecimals(result);
+      screen.value = eval(screen.value);
     } catch (error) {
-      screen.value = 'Error';
+      screen.value = "Error";
     }
   }
   // Remove the last character from the screen
-  else if (key === 'Backspace') {
+  else if (key === "Backspace") {
     screen.value = screen.value.slice(0, -1);
   }
   // Clear the screen
-  else if (key === 'Escape') {
-    screen.value = '';
+  else if (key === "Escape") {
+    screen.value = "";
   }
 }
 
-// Add event listeners to buttons
-buttons.forEach(button => {
-  button.addEventListener('click', handleButtonClick);
+// Add event listeners for button clicks
+buttons.forEach((button) => {
+  button.addEventListener("click", handleButtonClick);
 });
 
-// Add event listener to keyboard input
-document.addEventListener('keydown', handleKeyboardInput);
+// Add event listener for keyboard input
+document.addEventListener("keydown", handleKeyboardInput);
 
 // Set initial power state
 togglePower();
